@@ -12,6 +12,7 @@ The model basically consists of two branches. The first branch processes the inp
 The file `test_mdoel.py` is for testing the pretrained model using live photos from webcam. Face is detected and the frame with rPPG are passed to the model and the prediction result is calculated. 
 The result of a list of frames are buffered (the length of the buffer is determined in the variable called **frames_buffer** ) and if the sum of the prediction results reached an acceptable value (as in **accepted_falses** variable) it announces result accordingly (real/spoof)   [*Note that 0 indicates real and 1 indicates spoof*]
 
+Roc added
 
 # Credits:
 - The faces are detected using "haarcascade_frontalface_default.xml".
