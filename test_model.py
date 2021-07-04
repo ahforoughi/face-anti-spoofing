@@ -24,22 +24,18 @@ print("[INFO] Model is loaded from disk")
 dim = (128,128)
 def get_rppg_pred(frame):
     use_classifier = True  # Toggles skin classifier
-    use_flow = False       # (Mixed_motion only) Toggles PPG detection with Lukas Kanade optical flow          
+          # (Mixed_motion only) Toggles PPG detection with Lukas Kanade optical flow          
     sub_roi = []           # If instead of skin classifier, forhead estimation should be used set to [.35,.65,.05,.15]
     use_resampling = False  # Set to true with webcam 
     
-    fftlength = 300
     fs = 20
-    f = np.linspace(0,fs/2,fftlength/2 + 1) * 60;
 
     timestamps = []
     time_start = [0]
 
-    break_ = False
 
     rPPG_extracter = rPPG_Extracter()
-    rPPG_extracter_lukas = rPPG_Lukas_Extracter()
-    bpm = 0
+
     
     dt = time.time()-time_start[0]
     time_start[0] = time.time()
@@ -106,14 +102,14 @@ while True:
             rppg_s = rppg_s.T
 
             pred = make_pred([sub_img,rppg_s])
-
+            print('=======', pred)
             collected_results.append(np.argmax(pred))
             counter += 1
+            print("====== ", counter, collected_results)
 
             cv2.putText(frame,"Real: "+str(pred[0][0]), (50,30), cv2.FONT_HERSHEY_SIMPLEX, 1.0, (255, 255, 255), lineType=cv2.LINE_AA)
             cv2.putText(frame,"Fake: "+str(pred[0][1]), (50,60), cv2.FONT_HERSHEY_SIMPLEX, 1.0, (255, 255, 255), lineType=cv2.LINE_AA)
             if len(collected_results) == frames_buffer:
-                #print(sum(collected_results))
                 if sum(collected_results) <= accepted_falses:
                     cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
                 else:
